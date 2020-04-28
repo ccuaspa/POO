@@ -34,6 +34,11 @@ float angulotp2=0;
 int contadorc2a=0;
 int contadorc2b=0;
 float anguloc2=0;
+///////////////////////////////////////
+int color_negro=color(0);
+PImage imagen1;
+PImage imagen2;
+
 //////////////////////////////////////
 float bx;
 float by;
@@ -45,16 +50,21 @@ float xOffset = 0.0;
 float yOffset = 0.0; 
 float angle;
 
-boolean teclado, mouse, arriba, abajo, izquierda, derecha, tg1, tg2, tm, tp1, tp2, cuadrado, cuadrilatero, rd, ri;
+boolean teclado, mouse, arriba, abajo, izquierda, derecha, tg1, tg2, tm, tp1, tp2, cuadrado, cuadrilatero, rd, ri, check;
 
 void setup() {
   size(1240, 720);
   bx = width/2;
   by = height/2;
   rectMode(RADIUS);
+  imagen1 = loadImage("Oso.png");
+  imagen2 = loadImage("Inicio.png");
 }
 void draw() {
   background(255);
+  if (mouse==false && teclado==false){
+    inicio();
+  }
   if (mouse==true) {
     background(0);
 
@@ -404,8 +414,41 @@ void draw() {
     rotate(anguloc2); 
     quad(0, 0, 100, 0, 150, -50, 50, -50);
     pop();
+    if (check==true){
+      count_teclado();
+    }
   }
+}     
+///////////////////////////////////////7
+void count_teclado(){
+  //Carga en el arreglo unidimensional pixels todos los pixeles del canvas 
+  int contador_teclado = 0;
+  loadPixels();
+  //Verificacion pixel a pixel 
+  for (int i=0; i<width * height ;i++){
+    //lectura pixel a pixel  
+    if (pixels[i] == color_negro) {
+       contador_teclado = contador_teclado+1;
+      }
+    
+  }
+  if (contador_teclado<3000){
+    println("Victoria");
+    print(contador_teclado);
+    print("");
+    image(imagen1, 50, 50);
+  }else {
+    println("Intentalo de nuevo");
+    print(contador_teclado);
+    print("");
+    check=false;
+  }
+  
 }
+void inicio(){
+  image(imagen2, 200, 200);
+}
+/////////////////////////////////////7
 void keyPressed() {
   if (keyCode== LEFT) izquierda =true; rd=false; ri=false;
   if (keyCode==RIGHT) derecha=true; rd=false; ri=false;
@@ -501,6 +544,18 @@ void keyPressed() {
   }
   if (key=='i'||key=='I'){
     ri=true;
+  }
+  if (keyCode==ENTER) {
+    tg1=false; 
+    tg2=false;
+    tm=false;
+    tp1=false;
+    tp2=false;
+    cuadrado=false;
+    cuadrilatero=false;
+    rd=false;
+    ri=false;
+    check=true;
   }
 }
 
